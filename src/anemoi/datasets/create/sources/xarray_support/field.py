@@ -14,6 +14,7 @@ from functools import cached_property
 from typing import Any
 
 from earthkit.data import Field
+from earthkit.data.indexing.fieldlist import ClonedFieldCore
 from earthkit.data.core.fieldlist import math
 from numpy.typing import NDArray
 
@@ -206,3 +207,12 @@ class XArrayField(Field):
         """
         # we don't use .values as this will download the data
         return self.selection
+
+    def clone(self, **kwargs):
+        return ClonedXarrayField(self, **kwargs)
+
+
+class ClonedXarrayField(ClonedFieldCore, XArrayField):
+    def __init__(self, field, **kwargs):
+        ClonedFieldCore.__init__(self, field, **kwargs)
+        XArrayField.__init__(self, field.owner, self._values())
