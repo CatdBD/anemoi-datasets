@@ -209,10 +209,10 @@ class XArrayField(Field):
         return self.selection
 
     def clone(self, **kwargs):
-        return ClonedXarrayField(self, **kwargs)
+        return ClonedXarrayField(self, self.selection, **kwargs)
 
 
 class ClonedXarrayField(ClonedFieldCore, XArrayField):
-    def __init__(self, field, **kwargs):
+    def __init__(self, field, selection, **kwargs):
         ClonedFieldCore.__init__(self, field, **kwargs)
-        XArrayField.__init__(self, field.owner, self._values())
+        XArrayField.__init__(self, field.owner, selection)
